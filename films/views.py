@@ -50,3 +50,16 @@ class FilmList(ListView):
     def get_queryset(self):
         user = self.request.user
         return user.films.all()
+
+
+@login_required
+def add_film(request):
+    name = request.POST.get('filmname')
+    film = Film.objects.create(name=name)
+
+    #add film to users list
+    request.user.films.add(film)
+
+    #return template with user's films
+    films = request.user.films.all()
+    return render(request, 'partials/film-list.html', {'films': films})
