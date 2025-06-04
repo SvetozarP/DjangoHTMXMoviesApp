@@ -32,9 +32,9 @@ def check_username(request):
     username = request.POST.get('username')
     if request.htmx:
         if get_user_model().objects.filter(username=username).exists():
-            return HttpResponse('<div style="color: red" id="username-error">This username is already exists.</div>')
+            return HttpResponse('<div class="error" id="username-error">This username is already exists.</div>')
 
         else:
-            return HttpResponse('<div style="color: green" id="username-error">This username is available.</div')
+            return HttpResponse('<div class="success" id="username-error">This username is available.</div')
     else:
         return redirect("login")
