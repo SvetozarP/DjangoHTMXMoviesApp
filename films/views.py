@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
@@ -6,6 +7,8 @@ from django.views.generic import FormView, TemplateView, RedirectView
 from django.contrib.auth import get_user_model, logout
 
 from films.forms import RegisterForm
+from films.models import Film
+from django.views.generic.list import ListView
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -38,3 +41,12 @@ def check_username(request):
             return HttpResponse('<div class="success" id="username-error">This username is available.</div')
     else:
         return redirect("login")
+
+class FilmList(ListView):
+    template_name = 'films.html'
+    model = Film
+    context_object_name = 'films'
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.films.all()

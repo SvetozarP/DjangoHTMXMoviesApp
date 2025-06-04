@@ -6,7 +6,8 @@ urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
     path('login/', views.Login.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path("register/", views.RegisterView.as_view(), name="register")
+    path("register/", views.RegisterView.as_view(), name="register"),
+    path('films/', views.FilmList.as_view(), name="film-list"),
 ]
 
 htmx_urlpatterns = [
