@@ -63,3 +63,11 @@ def add_film(request):
     #return template with user's films
     films = request.user.films.all()
     return render(request, 'partials/film-list.html', {'films': films})
+
+@login_required
+def delete_film(request, pk):
+    # remove the film from the list
+    request.user.films.remove(pk)
+    # return the list after deletion
+    films = request.user.films.all()
+    return render(request, 'partials/film-list.html', {'films': films})
