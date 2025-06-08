@@ -7,6 +7,7 @@ from django.views.generic import FormView, TemplateView, RedirectView
 from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 
 from films.forms import RegisterForm
 from films.models import Film
@@ -15,9 +16,11 @@ from django.views.generic.list import ListView
 # Create your views here.
 class IndexView(TemplateView):
     template_name = 'index.html'
-    
+
+
 class Login(LoginView):
     template_name = 'registration/login.html'
+
 
 class RegisterView(FormView):
     form_class = RegisterForm
@@ -33,6 +36,7 @@ def logout_view(request):
     logout(request)
     return redirect("index")
 
+
 def check_username(request):
     username = request.POST.get('username')
     if request.htmx:
@@ -43,6 +47,7 @@ def check_username(request):
             return HttpResponse('<div class="success" id="username-error">This username is available.</div')
     else:
         return redirect("login")
+
 
 class FilmList(ListView, LoginRequiredMixin):
     template_name = 'films.html'
@@ -64,7 +69,12 @@ def add_film(request):
 
     #return template with user's films
     films = request.user.films.all()
-    return render(request, 'partials/film-list.html', {'films': films})
+    messages.success(request, f'Added {name} to list of films')
+    context = {
+        'films': films,
+    }
+    return render(request, 'partials/film-list.html', context)
+
 
 @login_required
 @require_http_methods(['DELETE'])
@@ -74,6 +84,7 @@ def delete_film(request, pk):
     # return the list after deletion
     films = request.user.films.all()
     return render(request, 'partials/film-list.html', {'films': films})
+
 
 @login_required
 @require_http_methods(['POST'])
@@ -87,3 +98,7 @@ def search_film(request):
     context = {'results': results}
 
     return render(request, 'partials/search-results.html', context)
+
+
+def clear(request):
+    return HttpResponse('')
