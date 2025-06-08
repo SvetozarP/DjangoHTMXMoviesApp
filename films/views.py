@@ -5,6 +5,8 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView, RedirectView
 from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.http import require_http_methods
 
 from films.forms import RegisterForm
 from films.models import Film
@@ -42,7 +44,7 @@ def check_username(request):
     else:
         return redirect("login")
 
-class FilmList(ListView):
+class FilmList(ListView, LoginRequiredMixin):
     template_name = 'films.html'
     model = Film
     context_object_name = 'films'
@@ -55,7 +57,7 @@ class FilmList(ListView):
 @login_required
 def add_film(request):
     name = request.POST.get('filmname')
-    film = Film.objects.create(name=name)
+    film = Film.objects.get_or_create(name=name)[0]
 
     #add film to users list
     request.user.films.add(film)
@@ -65,9 +67,20 @@ def add_film(request):
     return render(request, 'partials/film-list.html', {'films': films})
 
 @login_required
+@require_http_methods(['DELETE'])
 def delete_film(request, pk):
     # remove the film from the list
     request.user.films.remove(pk)
     # return the list after deletion
     films = request.user.films.all()
     return render(request, 'partials/film-list.html', {'films': films})
+
+@login_required
+@require_http_methods(['POST'])
+def search_film(request):
+    search_text = request.POST.get('search')
+
+    results = Film.objects.filter(name__icontains=search_text)
+    context = {'results': results}
+
+    return render(request, 'partials/search-results.html', context)
