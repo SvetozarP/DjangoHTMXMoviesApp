@@ -21,6 +21,7 @@
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
 </head>
 <body>
@@ -33,6 +34,17 @@
     <script>
         document.body.addEventListener('htmx:configRequest', (e) => {
             e.detail.headers['X-CSRFtoken'] = '{{ csrf_token }}';
+        })
+
+        htmx.onLoad(function(content) {
+            let sortables = content.querySelectorAll('.sortable');
+            for (let i = 0; i < sortables.length; i++) {
+                let sortable = sortables[i];
+                new Sortable(sortable, {
+                    animation: 150,
+                    ghostClass: 'blue-background-class',
+                });
+            }
         })
     </script>
 </body>
