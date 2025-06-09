@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse, HttpResponsePermanentRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView, RedirectView
@@ -119,3 +119,16 @@ def sort(request):
         films.append(userfilm)
 
     return render(request, 'partials/film-list.html', {'films': films})
+
+@login_required
+def detail(request, pk):
+    userfilm = get_object_or_404(UserFilms, pk=pk)
+    context = {'userfilm': userfilm}
+    return render(request, 'partials/film-detail.html', context)
+
+
+@login_required
+def films_partial(request):
+    films = UserFilms.objects.filter(user=request.user)
+    context = {'films': films}
+    return render(request, 'partials/film-list.html', context)
