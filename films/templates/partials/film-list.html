@@ -30,7 +30,9 @@
                 <div>
                 <input type="hidden" name="film_order" value="{{ film.pk}}" />
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a hx-get="{% url 'detail' film.pk %}" hx-target="#film-list" style="cursor:pointer;">
+                        <a hx-get="{% url 'detail' film.pk %}"
+                           hx-target="#film-list" style="cursor:pointer;"
+                           hx-push-url="/films/{{ film.film.name }}">
                         #{{ film.order }} {{ film.film.name }}
                             </a>
                         <span class="badge badge-danger badge-pill"

@@ -5,7 +5,11 @@
 
         <p>This film is #{{ userfilm.order }} in {{ userfilm.user.username|title }}'s list</p>
 
-        <button class="btn btn-primary" hx-get="{% url 'film-list-partial' %}" hx-target="#film-list">Your list</button>
+        <button class="btn btn-primary"
+                hx-get="{% url 'film-list-partial' %}"
+                hx-target="#film-list"
+                hx-push-url="/films"
+                >Your list</button>
 
     </div>
 
