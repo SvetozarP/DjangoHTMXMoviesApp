@@ -2,11 +2,14 @@
 
 {% block content %}
 <div class="align-center col-10 offset-1">
+  <main class="d-flex justify-content-between">
+    <section id="film-list" class="col-12">
 
-    <main class="d-flex">
-        <section id="film-list" class="col-12">
-            {% include 'partials/film-list.html' %}
-        </section>
-    </main>
+      {% include 'partials/film-list.html' %}
+    </section>
+    <section class="col-4 offset-1">
+
+    </section>
+  </main>
 </div>
 {% endblock content %}

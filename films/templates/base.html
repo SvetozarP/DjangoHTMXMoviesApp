@@ -31,21 +31,37 @@
         {% block content %}
         {% endblock %}
     </div>
-    <script>
-        document.body.addEventListener('htmx:configRequest', (e) => {
-            e.detail.headers['X-CSRFtoken'] = '{{ csrf_token }}';
-        })
+{#    <script>#}
+{#        document.body.addEventListener('htmx:configRequest', (e) => {#}
+{#            e.detail.headers['X-CSRFtoken'] = '{{ csrf_token }}';#}
+{#        })#}
+{##}
+{#        htmx.onLoad(function(content) {#}
+{#            let sortables = content.querySelectorAll('.sortable');#}
+{#            for (let i = 0; i < sortables.length; i++) {#}
+{#                let sortable = sortables[i];#}
+{#                new Sortable(sortable, {#}
+{#                    animation: 150,#}
+{#                    ghostClass: 'blue-background-class',#}
+{#                });#}
+{#            }#}
+{#        })#}
+{#    </script>#}
 
-        htmx.onLoad(function(content) {
-            let sortables = content.querySelectorAll('.sortable');
-            for (let i = 0; i < sortables.length; i++) {
-                let sortable = sortables[i];
-                new Sortable(sortable, {
-                    animation: 150,
-                    ghostClass: 'blue-background-class',
-                });
-            }
-        })
+    <script>
+      document.body.addEventListener('htmx:configRequest', (e) => {
+        e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      });
+
+      htmx.onLoad(function(content) {
+        let sortables = content.querySelectorAll('.sortable');
+        for (let sortable of sortables) {
+          new Sortable(sortable, {
+            animation: 150,
+            ghostClass: 'blue-background-class',
+          });
+        }
+      });
     </script>
 </body>
 </html>

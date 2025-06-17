@@ -1,5 +1,6 @@
 from django.db.models import Max
 from films.models import UserFilms
+from django.db.models import F
 
 
 def get_max_order(user) -> int:
@@ -12,12 +13,11 @@ def get_max_order(user) -> int:
 
 
 def reorder(user):
-    existing_films = UserFilms.objects.filter(user=user)
+    existing_films = UserFilms.objects.filter(user=user).order_by('order', 'id')  # ensure stable order
     if not existing_films.exists():
         return
-    number_of_films = existing_films.count()
-    new_ordering = range(1, number_of_films + 1)
 
-    for order, user_film in zip(new_ordering, existing_films):
-        user_film.order = order
-        user_film.save()
+    for idx, user_film in enumerate(existing_films, start=1):
+        user_film.order = idx
+
+    UserFilms.objects.bulk_update(existing_films, ['order'])

@@ -1,55 +1,134 @@
-<div class="d-flex justify-content-between align-items-center">
-    <p class="lead ml-0">My Films</p>
-    <form hx-post="{% url 'add-film' %}"
-          hx-target='#film-list'
-          hx-swap="innerHTML"
-          class="d-flex align-items-center">
-        {% csrf_token %}
-        <input type="text"
-            id="filmname-input"
-            name="filmname"
-            class="form-control-sm mr-2"
-            placeholder="Enter a film" />
-        <button type="submit" class="btn btn-success btn-sm">Add Film</button>
-    </form>
+{#<div class="d-flex justify-content-between align-items-center">#}
+{#    <p class="lead ml-0">My Films</p>#}
+{#    <form hx-post="{% url 'add-film' %}"#}
+{#          hx-target='#film-list'#}
+{#          hx-swap="innerHTML"#}
+{#          class="d-flex align-items-center">#}
+{#        {% csrf_token %}#}
+{#        <input type="text"#}
+{#            id="filmname-input"#}
+{#            name="filmname"#}
+{#            class="form-control-sm mr-2"#}
+{#            placeholder="Enter a film" />#}
+{#        <button type="submit" class="btn btn-success btn-sm">Add Film</button>#}
+{#    </form>#}
+{#</div>#}
+{#<hr/>#}
+{##}
+{#<div class="d-flex justify-content-between">#}
+{##}
+{#<section class="col-6">#}
+{##}
+{#    {% if messages %}#}
+{#    <ul class="messages" hx-get="{% url 'clear' %}" hx-trigger="load delay:3s">#}
+{#        {% for message in messages %}#}
+{#        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#    {% endif %}#}
+{##}
+{#    {% if films %}#}
+{#    <div id="film-list-body">#}
+{#        {% csrf_token %}#}
+{#        <form class="sortable list-group" hx-trigger="end" hx-post="{% url 'sort' %}" hx-target="#film-list">#}
+{#          <form class="sortable list-group col-xs-12"#}
+{#                hx-post="{% url 'sort' %}"#}
+{#                hx-target="#film-list-body"#}
+{#                hx-swap="outerHTML"#}
+{#                hx-trigger="end">#}
+{#              #}
+{#            <div class="htmx-indicator">Updating...</div>#}
+{#                {% include 'partials/film-list-elements.html' %}#}
+{#        </form>#}
+{#    </div>#}
+{#    {% else %}#}
+{#        <p>You do not have any films in your list</p>#}
+{#    {% endif %}#}
+{##}
+{#    <div id="film-list-body">#}
+{#      {% if films %}#}
+{#        <form class="sortable list-group col-xs-12"#}
+{#              hx-post="{% url 'sort' %}"#}
+{#              hx-target="#film-list-body"#}
+{#              hx-swap="outerHTML"#}
+{#              hx-trigger="end">#}
+{#          <div class="htmx-indicator">Updating...</div>#}
+{#          {% include "partials/film-list-elements.html" %}#}
+{#        </form>#}
+{#      {% else %}#}
+{#        <p>You don't have any films in your list</p>#}
+{#      {% endif %}#}
+{#    </div>#}
+{##}
+{##}
+{#</section>#}
+{##}
+{#<section class="col-4 offset-1">#}
+{#    {% include 'partials/search.html' %}#}
+{#</section>#}
+{#</div>#}
+{##}
+{#{% if request.method == 'POST' %}#}
+{#<input type="text"#}
+{#    hx-swap-oob="true"#}
+{#    id="filmname-input"#}
+{#    name="filmname"#}
+{#    class="form-control-sm mr-2"#}
+{#    placeholder="Enter a film" />#}
+{#{% endif %}#}
+
+<div id="film-list-body">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <p class="lead ml-0">My Films</p>
+        <div class="d-flex flex-column">
+            <form hx-post="{% url 'add-film' %}"
+                hx-target="#film-list-body"
+                hx-swap="innerHTML"
+                class="d-flex align-items-center">
+                {% csrf_token %}
+                <input type="text"
+                    id="filmname-input"
+                    name="filmname"
+                    class="form-control-sm mr-2"
+                    placeholder="Enter a film" />
+                <button type="submit" class="btn btn-success btn-sm">Add Film</button>
+            </form>
+            <div class="mt-4">
+                {% include 'partials/search.html' %}
+            </div>
+        </div>
 </div>
 <hr/>
 
 <div class="d-flex justify-content-between">
-
-<section class="col-6">
+  <section class="col-6">
 
     {% if messages %}
     <ul class="messages" hx-get="{% url 'clear' %}" hx-trigger="load delay:3s">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
     </ul>
     {% endif %}
 
-    {% if films %}
 
-        {% csrf_token %}
-        <form class="sortable list-group" hx-trigger="end" hx-post="{% url 'sort' %}" hx-target="#film-list">
-            <div class="htmx-indicator">Updating...</div>
-                {% include 'partials/film-list-elements.html' %}
+      {% if films %}
+        <form class="sortable list-group col-xs-12"
+              hx-post="{% url 'sort' %}"
+              hx-target="#film-list-body"
+              hx-swap="outerHTML"
+              hx-trigger="end">
+          <div class="htmx-indicator">Updating...</div>
+          {% include "partials/film-list-elements.html" %}
         </form>
-    {% else %}
-        <p>You do not have any films in your list</p>
-    {% endif %}
-
-</section>
-
-<section class="col-4 offset-1">
-    {% include 'partials/search.html' %}
-</section>
+      {% else %}
+        <p>You don't have any films in your list</p>
+      {% endif %}
+        </section>
+        </div>
 </div>
 
-{% if request.method == 'POST' %}
-<input type="text"
-    hx-swap-oob="true"
-    id="filmname-input"
-    name="filmname"
-    class="form-control-sm mr-2"
-    placeholder="Enter a film" />
-{% endif %}
+
+
+
