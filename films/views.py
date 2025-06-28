@@ -24,6 +24,7 @@ class IndexView(TemplateView):
 
 class Login(LoginView):
     template_name = 'registration/login.html'
+    success_url = reverse_lazy("index")
 
 
 class RegisterView(FormView):
